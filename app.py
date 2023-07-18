@@ -70,7 +70,7 @@ def ask_question():
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=input_test)]
     output = model.predict_messages(messages)
 
-    answer = output.to_json()["kwargs"]["content"]
+    answer = output
 
     return jsonify({"answer": answer})
 
