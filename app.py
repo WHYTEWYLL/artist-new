@@ -86,9 +86,9 @@ def ask_question():
         return jsonify({"answer": str(output)})
 
 
-@app.route("/news", methods=["post"])
+@app.route("/news", methods=["get"])
 @cross_origin()
-def ask_question():
+def get_news():
     # /v2/top-headlines
     top_headlines = newsapi.get_top_headlines(
         category="business", language="en", country="us"
