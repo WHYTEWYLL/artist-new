@@ -63,14 +63,18 @@ Output:  Keanu Reeves portrait photo of a asia old warrior chief, tribal panther
 @cross_origin()
 def ask_question():
     data = request.get_json()
-    print(data)
     new_prompt = data["new_prompt"]
 
     input_test = "NEW_DAY Input: " + new_prompt
     messages = [SystemMessage(content=system_prompt), HumanMessage(content=input_test)]
+    print("--" * 20)
+    print(messages)
+    print("--" * 20)
     output = model.predict_messages(messages)
+    print("--" * 20)
+    print(answer)
 
-    answer = output
+    answer = output.to_json()["kwargs"]["content"]
 
     return jsonify({"answer": answer})
 
