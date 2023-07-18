@@ -12,9 +12,6 @@ app = Flask(__name__)
 app.config["TIMEOUT"] = 300
 cors = CORS(app, allow_headers=["Origin", "X-Requested-With", "Content-Type", "Accept"])
 
-newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
-
-
 app.config["CORS_HEADERS"] = "Content-Type"
 
 
@@ -89,14 +86,18 @@ def ask_question():
 @app.route("/news", methods=["get"])
 @cross_origin()
 def get_news():
-    # /v2/top-headlines
-    top_headlines = newsapi.get_top_headlines(
-        category="business", language="en", country="us"
-    )
+    try:
+        newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
 
-    # /v2/top-headlines/sources
-    todays_new = top_headlines["articles"][0]["title"]
-    return todays_new
+        top_headlines = newsapi.get_top_headlines(
+            category="business", language="en", country="us"
+        )
+
+        # /v2/top-headlines/sources
+        todays_new = top_headlines["articles"][0]["title"]
+        return jsonify({"answer": str(todays_new)})
+    except Exception as e:
+        return jsonify({"answer": str(e)})
 
 
 @app.route("/")
