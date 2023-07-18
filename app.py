@@ -78,14 +78,17 @@ def ask_question():
         print("--" * 20)
         output = model.predict_messages(messages)
         print(output)
+        print(type(output))
         print("--" * 20)
         answer = output.to_json()["kwargs"]["content"]
         print(answer)
+        print(type(answer))
+        print("--" * 20)
 
         return jsonify({"answer": answer})
 
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"answer": str(output)})
 
 
 @app.route("/")
