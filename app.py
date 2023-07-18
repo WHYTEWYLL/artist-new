@@ -83,17 +83,18 @@ def ask_question():
         return jsonify({"answer": str(output)})
 
 
-@app.route("/news", methods=["get"])
+@app.route("/news/", methods=["post"])
 @cross_origin()
 def get_news():
     try:
+        data = request.get_json()
+        category = data["category"]
         newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
 
         top_headlines = newsapi.get_top_headlines(
-            category="business", language="en", country="us"
+            category=category, language="en", country="us"
         )
 
-        # /v2/top-headlines/sources
         todays_new = top_headlines["articles"][0]["title"]
         return jsonify({"answer": str(todays_new)})
     except Exception as e:
