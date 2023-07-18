@@ -17,6 +17,8 @@ app.config["CORS_HEADERS"] = "Content-Type"
 
 load_dotenv()
 
+print(os.environ.get("OPENAI_API_KEY"))
+
 os.environ.get("")
 
 model = ChatOpenAI(
@@ -65,18 +67,25 @@ def ask_question():
     data = request.get_json()
     new_prompt = data["new_prompt"]
 
-    input_test = "NEW_DAY Input: " + new_prompt
-    messages = [SystemMessage(content=system_prompt), HumanMessage(content=input_test)]
-    print("--" * 20)
-    print(messages)
-    print("--" * 20)
-    output = model.predict_messages(messages)
-    print("--" * 20)
-    print(answer)
+    try:
+        input_test = "NEW_DAY Input: " + new_prompt
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=input_test),
+        ]
+        print("--" * 20)
+        print(messages)
+        print("--" * 20)
+        output = model.predict_messages(messages)
+        print("--" * 20)
+        print(answer)
 
-    answer = output.to_json()["kwargs"]["content"]
+        answer = output.to_json()["kwargs"]["content"]
 
-    return jsonify({"answer": answer})
+        return jsonify({"answer": answer})
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 
 @app.route("/")
