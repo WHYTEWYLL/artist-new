@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
+from newsapi import NewsApiClient
 
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
@@ -10,6 +11,8 @@ from langchain.schema import AIMessage, HumanMessage, SystemMessage
 app = Flask(__name__)
 app.config["TIMEOUT"] = 300
 cors = CORS(app, allow_headers=["Origin", "X-Requested-With", "Content-Type", "Accept"])
+
+newsapi = NewsApiClient(api_key=os.environ.get("NEWS_API_KEY"))
 
 
 app.config["CORS_HEADERS"] = "Content-Type"
@@ -81,6 +84,19 @@ def ask_question():
 
     except Exception as e:
         return jsonify({"answer": str(output)})
+
+
+@app.route("/news", methods=["post"])
+@cross_origin()
+def ask_question():
+    # /v2/top-headlines
+    top_headlines = newsapi.get_top_headlines(
+        category="business", language="en", country="us"
+    )
+
+    # /v2/top-headlines/sources
+    todays_new = top_headlines["articles"][0]["title"]
+    return todays_new
 
 
 @app.route("/")
