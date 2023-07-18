@@ -77,10 +77,9 @@ def ask_question():
         print(messages)
         print("--" * 20)
         output = model.predict_messages(messages)
+        print(output)
         print("--" * 20)
-
         answer = output.to_json()["kwargs"]["content"]
-
         print(answer)
 
         return jsonify({"answer": answer})
