@@ -76,10 +76,8 @@ def ask_question():
 
         output = model.predict_messages(messages)
 
-        print(str(output))
-
         return jsonify(
-            {"answer": str(output).split("Prompt:")[1].split("additional_kwargs=")[0]}
+            {"answer": str(output).split("Output:")[1].split("additional_kwargs")[0]}
         )
 
     except Exception as e:
