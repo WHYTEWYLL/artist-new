@@ -73,12 +73,14 @@ def ask_question():
             SystemMessage(content=system_prompt),
             HumanMessage(content=input_test),
         ]
-        print("--" * 20)
-        print(messages)
-        print("--" * 20)
+
         output = model.predict_messages(messages)
+
+        print(str(output).split("Output:")[1])
+        print(str(output).split("Output:")[1].split("additional_kwargs=")[0])
+
         return jsonify(
-            {"answer": str(output).split("Output:")[1].split("' additional_kwargs=")[0]}
+            {"answer": str(output).split("Output:")[1].split("additional_kwargs=")[0]}
         )
 
     except Exception as e:
